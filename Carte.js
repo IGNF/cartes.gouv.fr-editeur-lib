@@ -205,7 +205,7 @@ class Carte extends ol_Object {
       // Select MVT
       if (features[0] instanceof RenderFeature) {
         const f0 = features[0];
-        if (f0.getLayer().selectable()) {
+        if (f0.getLayer?.()?.selectable?.()) {
           const attr = f0.getProperties();
           attr.geometry = new LineString([e.coordinate, e.coordinate])
           const f = new Feature(attr)
