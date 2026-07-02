@@ -36,9 +36,11 @@ class GeopfExtensionsFormat extends LayerFormat {
    */
   static validConstructors = Object.freeze(Object.entries(constructors));
 
-  /** Read layer from param
-   * @param {Object} options extend layer options
-   * @param {string} url url of the static image
+  /**
+   * 
+   * @param {Object} options Objet json (couche provenant du fichier .carte)
+   * @return {GeoportalWMS|GeoportalWMTS|GeoportalMapBox|GeoportalWFS} Couche à ajouter
+   * @override
    */
   read(options) {
     let isGeopfLayer = false;
@@ -58,22 +60,50 @@ class GeopfExtensionsFormat extends LayerFormat {
     }
     const conf = (!Config.isConfigLoaded()) ? LayerConfig.getLayerConfig(options.catalogId) : null;
     const layer = new Constructor({
-        layer: options.name,
-        configuration: conf
-      });
+      layer: options.name,
+      configuration: conf
+    });
     this.readOptions(layer, options);
+    return layer;
+  }
+
+  /**
+   * 
+   * @param {GeoportalWMS|GeoportalWMTS|GeoportalMapBox|GeoportalWFS} layer Couche de donnée
+   * @param {Object} options Objet json (couche provenant du fichier .carte)
+   * @override
+   */
+  readOptions(layer, options) {
+    super.readOptions(layer, options);
 
     // Ajoute les éléments à la config
     layer.config.thumbnail = options.thumbnail || "default";
     layer.config.producer = options.producer || "";
     layer.config.catalogId = options.catalogId;
-    return layer;
+
+    // Options de configuration
+    if (options.styleName && options.styleTitle && options.styleUrl) {
+      layer.styleUrl = options.styleUrl;
+      layer.styleName = options.styleName;
+      layer.styleTitle = options.styleTitle;
+      // Essaie de mettre le style correspondant
+      try {
+        layer.setStyleMapBox().then(() => {
+          layer.setProperties({
+            "title": layer.getSource()._title || layer.styleName || layer.styleTitle,
+          });
+        });
+      } catch {
+        console.warn("setStyleMapBox not implement on layer", layer)
+      }
+    }
   }
 
   /** 
    * Transforme une couche des extensions en objet json.
    * @param {GeoportalWMS|GeoportalWMTS|GeoportalMapBox|GeoportalWFS} layer Couche à écrire
    * @return {object} JSON layer
+   * @override
    */
   write(layer) {
     let isGeopfLayer = false;
@@ -118,6 +148,14 @@ class GeopfExtensionsFormat extends LayerFormat {
       catalogId: config.catalogId,
       producer: config.producer,
     });
+    // Ajout du style s'il y'en a un
+    if (layer.styleName && layer.styleTitle && layer.styleUrl) {
+      Object.assign(result, {
+        styleName: layer.styleName,
+        styleTitle: layer.styleTitle,
+        styleUrl: layer.styleUrl,
+      })
+    }
     return result;
   }
 }
