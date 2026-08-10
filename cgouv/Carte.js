@@ -56,6 +56,7 @@ class GPPCarte extends Carte {
       // 'layerSwitcher',
       'legend',
       'legendBt',
+      'mapzone',
       // 'attribution',
     ];
 
