@@ -45,7 +45,7 @@ ignStyleDef["fillStrokeColor"] = Object.assign({}, ignStyleDef["strokeColor"]);
 ignStyleDef["fillStrokeColor"].short = `f${ignStyleDef["fillStrokeColor"].short}`;
 ignStyleDef["fillStrokeColor"].geom = /Polygon/;
 
-defaultIgnStyle.fillStrokeDash = defaultIgnStyle.strokeDash;
+defaultIgnStyle.fillStrokeDash = " "; // empty string
 ignStyleDef["fillStrokeDash"] = Object.assign({}, ignStyleDef["strokeDash"]);
 ignStyleDef["fillStrokeDash"].short = `f${ignStyleDef["fillStrokeDash"].short}`;
 ignStyleDef["fillStrokeDash"].geom = /Polygon/;
