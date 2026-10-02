@@ -1,9 +1,9 @@
 import ol_ext_element from 'ol-ext/util/element'
 import mcutil from '../../package.json'
 import {VERSION as olversion} from 'ol/util'
-import mbstyle from 'ol-mapbox-style/package.json'
+// import mbstyle from 'ol-mapbox-style/package.json'
 import maplibre from 'maplibre-gl/package.json'
-import chartjs from 'chart.js/package.json'
+// import chartjs from 'chart.js/package.json'
 import maplibre_layer from '@geoblocks/ol-maplibre-layer/package.json'
 import proj4 from 'proj4/package.json'
 import ol_ext from 'ol-ext/package.json'
@@ -34,11 +34,11 @@ function showInfo(data, info) {
 // Infos
 showInfo(olversion, 'Openlayers')
 showInfo(ol_ext)
-showInfo(mbstyle)
+// showInfo(mbstyle)
 showInfo(maplibre)
 showInfo(maplibre_layer)
 showInfo(proj4)
-showInfo(chartjs)
+// showInfo(chartjs)
 
 // Display project info
 console.log(
